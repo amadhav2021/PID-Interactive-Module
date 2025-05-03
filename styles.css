@@ -1,0 +1,377 @@
+/* Styles for the drone bang-bang controller simulation */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.page-wrapper {
+    display: flex; /* Add flexbox to layout sidebar and content */
+    width: 100%;
+}
+
+/* Sidebar Navigation Styles */
+.sidebar {
+    width: 200px;
+    background-color: #2c3e50;
+    color: white;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    text-align: center;
+    padding: 0 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header h2 {
+    color: #3498db;
+    font-size: 1.5rem;
+}
+
+.nav-links {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.nav-links li {
+    padding: 10px 15px;
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.nav-links li:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    border-left-color: #3498db;
+}
+
+.nav-links li.active {
+    background-color: rgba(52, 152, 219, 0.2);
+    border-left-color: #3498db;
+}
+
+.nav-links a {
+    color: #ecf0f1;
+    text-decoration: none;
+    display: block;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    text-decoration: none;
+}
+
+/* Original Styles - Modified to work with sidebar */
+.container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 20px;
+    margin-left: 200px;
+    flex: 1; /* Allow container to take remaining space */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+header h2 {
+    color: #3498db;
+    font-weight: 500;
+}
+
+a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.simulation-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.control-panel {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-right: 20px;
+    border-right: 1px solid #e1e8ed;
+}
+
+.param-group {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.param-group h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.param {
+    margin-bottom: 12px;
+}
+
+.param label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.param input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    flex: 1;
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+#resetBtn {
+    background-color: #e74c3c;
+}
+
+#resetBtn:hover {
+    background-color: #c0392b;
+}
+
+.info-panel {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.info-panel h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.info-panel p {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.visualization {
+    flex: 3;
+    display: flex;
+    position: relative;
+    height: 400px;
+}
+
+.altitude-scale {
+    width: 50px;
+    height: 100%;
+    position: relative;
+    border-right: 1px dashed #cbd5e0;
+}
+
+.scale-marker {
+    position: absolute;
+    right: 10px;
+    transform: translateY(50%); /* Center the text vertically with the marker line */
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* Updated altitude scale markers - positioned by percentage with transform */
+.visualization .altitude-scale .scale-marker:nth-child(1) { bottom: 100%; }
+.visualization .altitude-scale .scale-marker:nth-child(2) { bottom: 75%; }
+.visualization .altitude-scale .scale-marker:nth-child(3) { bottom: 50%; }
+.visualization .altitude-scale .scale-marker:nth-child(4) { bottom: 25%; }
+.visualization .altitude-scale .scale-marker:nth-child(5) { bottom: 0%; }
+
+.drone-container {
+    flex: 1;
+    position: relative;
+    height: 100%;
+    border-right: 1px dashed #cbd5e0;
+    /* Make the visualization area show more of the middle area */
+    background: linear-gradient(to bottom, #f8f9fa 0%, white 40%, white 60%, #f8f9fa 100%);
+}
+
+.target-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #e74c3c;
+    z-index: 10;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 0.8rem;
+    color: #e74c3c;
+}
+
+.drone {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: bottom 0.1s linear;
+    height: 30px; /* Explicitly set the height for the drone including propellers */
+}
+
+.drone-body {
+    width: 50px;
+    height: 20px;
+    background-color: #3498db;
+    border-radius: 10px;
+    position: relative;
+}
+
+.propeller {
+    width: 30px;
+    height: 5px;
+    background-color: #2c3e50;
+    position: absolute;
+    top: -5px; /* Position at the top of the drone body */
+}
+
+.propeller-left {
+    left: -10px; /* Overhang from the left edge */
+}
+
+.propeller-right {
+    right: -10px; /* Overhang from the right edge */
+}
+
+.thrust-indicator {
+    position: absolute;
+    top: 100%; /* Changed from bottom: -15px to top: 100% */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 0;
+    background: linear-gradient(to top, #f39c12, #e74c3c); /* Changed gradient direction from 'to top' to 'to bottom' */
+    transition: height 0.2s;
+}
+
+.graph-container {
+    flex: 2;
+    height: 100%;
+}
+
+.explanation {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.explanation h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.explanation p {
+    margin-bottom: 15px;
+}
+
+.explanation ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .page-wrapper {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    
+    .nav-links {
+        display: flex;
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+    
+    .nav-links li {
+        padding: 10px;
+        border-left: none;
+        border-bottom: 4px solid transparent;
+    }
+    
+    .nav-links li:hover, .nav-links li.active {
+        border-left-color: transparent;
+        border-bottom-color: #3498db;
+    }
+    
+    .simulation-container {
+        flex-direction: column;
+    }
+    
+    .control-panel {
+        border-right: none;
+        border-bottom: 1px solid #e1e8ed;
+        padding-right: 0;
+        padding-bottom: 20px;
+    }
+    
+    .visualization {
+        height: 500px;
+    }
+}

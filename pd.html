@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Controller</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Control Systems</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="bang-bang.html">Bang-Bang Control</a></li>
+                <li><a href="p.html">Proportional Control</a></li>
+                <li class="active"><a href="pd.html">PD Control</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <header>
+                <h1>How do drones control themselves?</h1>
+            </header>
+            <div class="simulation-container">
+                <div class="control-panel">
+                    <div class="param-group">
+                        <h3>Simulation Parameters</h3>
+                        <div class="param">
+                            <label for="targetAltitude">Target Altitude (m):</label>
+                            <input type="number" id="targetAltitude" min="0" max="55" value="30">
+                        </div>
+                        <div class="param">
+                            <label for="Proportional Gain">Proportional Gain (K<sub>P</sub>):</label>
+                            <input type="number" id="propGain" min="0" value="2.0">
+                        </div>
+                        <div class="param">
+                            <label for="Derivative Gain">Derivative Gain (K<sub>D</sub>):</label>
+                            <input type="number" id="derivGain" min="0" value="2.0">
+                        </div>
+                    </div>
+        
+                    <div class="controls">
+                        <button id="startBtn" class="btn">Start</button>
+                        <button id="resetBtn" class="btn">Reset</button>
+                    </div>
+        
+                    <div class="info-panel">
+                        <h3>Current Status</h3>
+                        <p>Position: <span id="positionValue">0.00</span> m</p>
+                        <p>Velocity: <span id="velocityValue">0.00</span> m/s</p>
+                        <p>Thrust: <span id="thrustStatus">OFF</span></p>
+                    </div>
+                </div>
+        
+                <div class="visualization">
+                    <div class="altitude-scale">
+                        <div class="scale-marker">60m</div>
+                        <div class="scale-marker">45m</div>
+                        <div class="scale-marker">30m</div>
+                        <div class="scale-marker">15m</div>
+                        <div class="scale-marker">0m</div>
+                    </div>
+        
+                    <div class="drone-container">
+                        <div id="targetLine" class="target-line">Target: 30m</div>
+                        <div id="drone" class="drone">
+                            <div class="propeller propeller-left"></div>
+                            <div class="drone-body"></div>
+                            <div class="propeller propeller-right"></div>
+                            <div id="thrustIndicator" class="thrust-indicator"></div>
+                        </div>
+                    </div>
+        
+                    <div class="graph-container">
+                        <canvas id="altitudeGraph"></canvas>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="explanation">
+                <h3>Analysis</h3>
+                <p>Pretty cool, right? What we just added is called a derivative controller, since it takes into account the rate of change of the error. The derivative gain (K<sub>D</sub>) determines how much weight we give the derivative part of the controller. Along with the proportional piece, the combined scheme is called a PD controller. This is already pretty good for this application.</p>
+                <p>If you play around with this though, you’ll notice you won’t be able to hit the target <em>exactly</em>, even though it’s close. Why is that?</p>
+                <p>This has to do with a quirk of the PD controller in this system. The closer the drone gets to the target (low error), the thrust decreases, just like in the plain P controller. This time, though, the D controller stabilizes any oscillations, so the drone eventually hovers in place. The drone is seeing a constant error, so it supplies a proportional thrust. However, the drone is hovering, which means the thrust force is exactly balanced by the force of gravity, so the drone stays in place forever. You could try to increasing the proportional gain to get closer to the target, but you’ll run into problems. Try it!</p>
+                <p>One way to solve this is to keep track of how the error has accumulated over time. This would help because if the drone spends a lot of time hovering away from the target, the error would build up and suggest that the thrust needs to change to get out of the steady-state error. <a href="pid.html">Let's see what this would look like.</a></p>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="pd.js"></script>
+</body>
+</html>

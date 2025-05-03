@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Controller</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Control Systems</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="bang-bang.html">Bang-Bang Control</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+        <header>
+            <h1>How do drones control themselves?</h1>
+        </header>
+
+        <div class="explanation">
+            <p>This sounds like an easy question, but if you dig a little deeper, it's actually quite a challenge. Imagine you have a drone and you want it to hover at a certain height. You might input a target altitude, but the drone can only control its propellers. How does it translate the target height into a command for the propellers?</p>
+            <p>The simplest strategy is to just turn the propellers on when the drone is below the target altitude, and turn them off when the drone is above. Seems logical, right? Use the simulator below to see how that would play out: </p>
+        </div>
+
+
+        <div class="simulation-container">
+            <div class="control-panel">
+                <div class="param-group">
+                    <h3>Simulation Parameters</h3>
+                    <div class="param">
+                        <label for="targetAltitude">Target Altitude (m):</label>
+                        <input type="number" id="targetAltitude" min="0" max="55" value="30">
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button id="startBtn" class="btn">Start</button>
+                    <button id="resetBtn" class="btn">Reset</button>
+                </div>
+                
+                <div class="info-panel">
+                    <h3>Current Status</h3>
+                    <p>Position: <span id="positionValue">0.00</span> m</p>
+                    <p>Velocity: <span id="velocityValue">0.00</span> m/s</p>
+                    <p>Thrust: <span id="thrustStatus">OFF</span></p>
+                </div>
+            </div>
+            
+            <div class="visualization">
+                <div class="altitude-scale">
+                    <div class="scale-marker">60m</div>
+                    <div class="scale-marker">45m</div>
+                    <div class="scale-marker">30m</div>
+                    <div class="scale-marker">15m</div>
+                    <div class="scale-marker">0m</div>
+                </div>
+                
+                <div class="drone-container">
+                    <div id="targetLine" class="target-line">Target: 30m</div>
+                    <div id="drone" class="drone">
+                        <div class="propeller propeller-left"></div>
+                        <div class="drone-body"></div>
+                        <div class="propeller propeller-right"></div>
+                        <div id="thrustIndicator" class="thrust-indicator"></div>
+                    </div>
+                </div>
+                
+                <div class="graph-container">
+                    <canvas id="altitudeGraph"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3>Analysis</h3>
+            <p>This type of controller is called a bang-bang controller, because it switches between 2 inputs (thrust on and thrust off). While the logic is simple, the results aren't great. Let's think about why the drone behaves the way it does.</p>
+            <p>As soon as the drone hits the target height, the propellers shut off. But the drone still has some upward momentum, so it overshoots the target a bit before falling back down due to gravity. Once the drone falls below the target height, the propellers turn back on, causing the drone to oscillate around the target. How can we fix this?</p>
+            <p>What if we ease the propeller speed as the drone gets closer to the target height? When the drone is far away, the propellers can be at full thrust, and as the drone gets closer to the target, the propellers slow down. <a href="p.html">Let's try it!</a></p>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="bang-bang.js"></script>
+</body>
+</html>

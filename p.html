@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Controller</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Control Systems</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="bang-bang.html">Bang-Bang Control</a></li>
+                <li class="active"><a href="p.html">Proportional Control</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <header>
+                <h1>How do drones control themselves?</h1>
+            </header>
+            <div class="simulation-container">
+                <div class="control-panel">
+                    <div class="param-group">
+                        <h3>Simulation Parameters</h3>
+                        <div class="param">
+                            <label for="targetAltitude">Target Altitude (m):</label>
+                            <input type="number" id="targetAltitude" min="0" max="55" value="30">
+                        </div>
+                        <div class="param">
+                            <label for="Proportional Gain">Proportional Gain (K<sub>P</sub>):</label>
+                            <input type="number" id="propGain" min="0" value="2.0">
+                        </div>
+                    </div>
+        
+                    <div class="controls">
+                        <button id="startBtn" class="btn">Start</button>
+                        <button id="resetBtn" class="btn">Reset</button>
+                    </div>
+        
+                    <div class="info-panel">
+                        <h3>Current Status</h3>
+                        <p>Position: <span id="positionValue">0.00</span> m</p>
+                        <p>Velocity: <span id="velocityValue">0.00</span> m/s</p>
+                        <p>Thrust: <span id="thrustStatus">OFF</span></p>
+                    </div>
+                </div>
+        
+                <div class="visualization">
+                    <div class="altitude-scale">
+                        <div class="scale-marker">60m</div>
+                        <div class="scale-marker">45m</div>
+                        <div class="scale-marker">30m</div>
+                        <div class="scale-marker">15m</div>
+                        <div class="scale-marker">0m</div>
+                    </div>
+        
+                    <div class="drone-container">
+                        <div id="targetLine" class="target-line">Target: 30m</div>
+                        <div id="drone" class="drone">
+                            <div class="propeller propeller-left"></div>
+                            <div class="drone-body"></div>
+                            <div class="propeller propeller-right"></div>
+                            <div id="thrustIndicator" class="thrust-indicator"></div>
+                        </div>
+                    </div>
+        
+                    <div class="graph-container">
+                        <canvas id="altitudeGraph"></canvas>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="explanation">
+                <h3>Analysis</h3>
+                <p>We’re getting closer to the target! This type of controller is called a proportional controller, since the thrust given to the propellers is proportional to how far off the drone is from the target. At each point, the drone calculates the error between its current position and the target position, and multiplies that error by a constant factor to figure out how much thrust it should give. This constant is called the proportional gain.</p>
+                <p>Notice that higher gains get the drone to the target faster, but they also tend to overshoot the target. This makes sense since, the higher the gain, the more thrust is supplied for a given error.</p>
+                <p>We still have the oscillation problem, even though it is better than before. Why is that? The challenge is that once the error is too small, the thrust supplied by the propellers is not enough to counteract the force of gravity, so the drone starts to fall. Then, as the error grows, the thrust is slowly increased until the drone climbs back up, then the cycle repeats. How can we stop this?</p>
+                <p>What we really need is a way for the drone to know how <em>quickly</em> its approaching the target. If you’ve driven a car before, you use the same idea maybe without even realizing it! If you approach a red light very slowly, you can still keep your foot on the gas, but if you have a lot of speed as you approach the light, you’ll take your foot off the gas much earlier since the car has a lot of momentum already. <a href="pd.html">Try it out!</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="p.js"></script>
+</body>
+</html>
